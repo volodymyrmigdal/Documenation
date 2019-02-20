@@ -19,24 +19,26 @@
       loadSidebar : '_sidebar.md',
       markdown:
       {
-        // renderer:
-        // {
-        //   link: function( href, title, text )
-        //   {
-        //     debugger
-        //     if( strBegins( href, '/' ) )
-        //     return this.origin.link( href,title,text );
+        renderer:
+        {
+          link: function( href, title, text )
+          {
+            debugger
+            if( strBegins( href, '/' ) )
+            return this.origin.link( href,title,text );
 
-        //     if( /\.md$/.test( href ) )
-        //     {
-        //       let currentPath = document.location.href.replace( document.location.origin + '/#','' );
-        //       let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
-        //       href = currentDir + '/' + href;
-        //     }
+            if( /\.md$/.test( href ) )
+            {
+              let currentPath = document.location.href.replace( document.location.origin + '/#','' );
+              let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
+              href = currentDir + '/' + href;
+            }
 
-        //     return `<a href="/#/${href}" title="${title}">${text}</a>`
-        //   }
-        // }
+            console.log( href )
+
+            return `<a href="Documentation/#/${href}" title="${title}">${text}</a>`
+          }
+        }
       },
       search:
       {
