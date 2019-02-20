@@ -25,7 +25,7 @@
           {
             debugger
             if( strBegins( href, '/' ) )
-            return this.origin.link( href,title,text );
+            return this.origin.link( 'Documentation/#/' + href,title,text );
 
             if( /\.md$/.test( href ) )
             {
