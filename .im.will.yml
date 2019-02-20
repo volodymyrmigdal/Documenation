@@ -10,7 +10,7 @@ path :
 
   docsWillbe : './.module/willbe/doc'
   docsTools : './.module/Tools/doc'
-  proto : './proto'
+  docsify : './proto/docsify'
   out.debug : './out'
   out.docs.Willbe : './out/docs/willbe'
   out.docs.Tools : './out/docs/wTools'
@@ -24,10 +24,10 @@ reflector :
   #     debug : 1
   #     doc : 1
 
-  reflect.proto :
+  reflect.docsify :
     inherit : predefined.*
     filePath :
-      path::proto : path::out.debug
+      path::docsify : path::out.debug
     criterion :
       debug : 1
 
@@ -51,10 +51,10 @@ step :
   #     debug : 1
   #     doc : 1
 
-  reflect.proto :
+  reflect.docsify :
     inherit : predefined.reflect
     reflector :
-      reflector::reflect.proto*=1
+      reflector::reflect.docsify*=1
     criterion :
       debug : 1
 
@@ -75,7 +75,7 @@ step :
 
   jsdoc.generate :
     currentPath : .
-    shell : node js2md.ss .module
+    shell : node proto/js2md/js2md.ss .module
 
   server.start :
     currentPath : .
@@ -90,7 +90,7 @@ build :
     steps :
       - step::submodules.download
       - step::clear.out
-      - step::reflect.proto*=1
+      - step::reflect.docsify*=1
       - step::reflect.docs.manual*=1
       - step::npm.install*=1
       - step::jsdoc.generate

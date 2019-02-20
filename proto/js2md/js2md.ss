@@ -17,7 +17,7 @@ let provider = _.fileProvider;
 
 function jsToMarkDownSingle( srcPath )
 {
-  let jsdocConf = path.resolve( 'jsdoc.json' );
+  let jsdocConf = path.join( __dirname, 'jsdoc.json' );
 
   _.assert( provider.fileExists( jsdocConf ) );
 
@@ -45,7 +45,15 @@ function jsToMarkDownSingle( srcPath )
   let nativizedFiles = path.s.nativize( files );
   let nativizedConf = path.nativize( jsdocConf );
 
-  let result = jsdoc2md.renderSync({ files : nativizedFiles, configure : nativizedConf });
+  let partials = [ 'sig-link.hbs', 'header.hbs' ];
+  let partialsPath = path.s.join( __dirname, 'partials', partials );
+
+  let result = jsdoc2md.renderSync
+  ({
+    files : nativizedFiles,
+    configure : nativizedConf,
+    partial : path.s.nativize( partialsPath )
+  });
 
   return result;
 }
@@ -65,7 +73,7 @@ function jsToMarkDown()
     includingTerminals : 0
   });
 
-  let jsdocOutPath = path.resolve( 'out/docs/Packages' );
+  let jsdocOutPath = path.resolve( 'out/docs/Reference' );
 
   modules.forEach( ( record ) =>
   {

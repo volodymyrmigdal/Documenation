@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>documentation</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="vendor/themes/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify =
+    {
+      name: 'Documentation',
+      repo: 'https://github.com/Wandalen/Documenation',
+      basePath: '/docs',
+      loadSidebar : '_sidebar.md',
+      auto2top : true,
+      markdown:
+      {
+        renderer:
+        {
+          link: rendererOnLink
+        }
+      },
+      search:
+      {
+          paths: 'auto',
+          placeholder: 'Search',
+          noData: 'No Results.'
+      },
+    }
+
+    //
+
+    function rendererOnLink( href, title, text )
+    {
+      if( strBegins( href, '/' ) )
+      return this.origin.link( href,title,text );
+
+      if( strBegins( href, '#' ) )
+      {
+        let currentPath = document.location.href.replace( document.location.origin + '/#/','' );
+        if( strHas( currentPath, '?' ) )
+        currentPath = currentPath.substring( 0,currentPath.indexOf( '?' ) );
+        let id = href.substring( 1 );
+        href = currentPath + '?id=' + id;
+      }
+      else if( /\.md$/.test( href ) )
+      {
+        let currentPath = document.location.href.replace( document.location.origin + '/#','' );
+        let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
+        href = currentDir + '/' + href;
+      }
+
+      return `<a href="/#/${href}" title="${title}">${text}</a>`
+    }
+
+    //
+
+    function strBegins( src, begin )
+    {
+      return src.lastIndexOf( begin, 0 ) === 0;
+    }
+
+    //
+
+    function strHas( src, has )
+    {
+      return src.indexOf( has ) != -1;
+    }
+
+  </script>
+  <script src="vendor/docsify.js"></script>
+  <script src="vendor/search.min.js"></script>
+</body>
+</html>
