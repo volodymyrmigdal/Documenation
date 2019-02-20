@@ -9,7 +9,7 @@ submodule :
 path :
 
   docsWillbe : './.module/willbe/doc'
-  docsTools : './.module/wTools/doc'
+  docsTools : './.module/Tools/doc'
   proto : './proto'
   out.debug : './out'
   out.docs.Willbe : './out/docs/willbe'
@@ -69,6 +69,10 @@ step :
     inherit : predefined.delete
     filePath : path::out.debug
 
+  npm.install :
+    currentPath : .
+    shell : npm i
+
   server.start :
     currentPath : .
     shell : node staticserver.ss
@@ -84,7 +88,7 @@ build :
       - step::clear.out
       - step::reflect.proto*=1
       - step::reflect.docs.manual*=1
+      - step::npm.install*=1
       - step::server.start
-      # - step::reflect.doc*=1
 
 
