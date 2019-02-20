@@ -73,6 +73,10 @@ step :
     currentPath : .
     shell : npm i
 
+  jsdoc.generate :
+    currentPath : .
+    shell : node js2md.ss .module
+
   server.start :
     currentPath : .
     shell : node staticserver.ss
@@ -89,6 +93,7 @@ build :
       - step::reflect.proto*=1
       - step::reflect.docs.manual*=1
       - step::npm.install*=1
+      - step::jsdoc.generate
       - step::server.start
 
 
