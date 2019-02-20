@@ -1,0 +1,94 @@
+
+about :
+  name : Documentation
+
+submodule :
+  willbe : git+https:///github.com/volodymyrmigdal/willbe.git/out/willbe#master
+  Tools : git+https:///github.com/Wandalen/wTools.git/out/wTools#master
+
+path :
+
+  docsWillbe : './.module/willbe/doc'
+  docsTools : './.module/Tools/doc'
+  proto : './proto'
+  out.debug : './out'
+  out.docs.Willbe : './out/docs/willbe'
+  out.docs.Tools : './out/docs/wTools'
+
+reflector :
+
+  # reflect.doc :
+  #   filePath :
+  #     submodule::*/exported::*=1/path::exportedDir*=1 : path::out.*=1
+  #   criterion :
+  #     debug : 1
+  #     doc : 1
+
+  reflect.proto :
+    inherit : predefined.*
+    filePath :
+      path::proto : path::out.debug
+    criterion :
+      debug : 1
+
+  reflect.docs.manual :
+    inherit : predefined.*
+    filePath :
+      path::docsWillbe : path::out.docs.Willbe
+      path::docsTools : path::out.docs.Tools
+    src :
+      ends : 'md'
+    criterion :
+      debug : 1
+
+step :
+
+  # reflect.doc :
+  #   inherit : predefined.reflect
+  #   reflector :
+  #     reflector::reflect.doc*=1
+  #   criterion :
+  #     debug : 1
+  #     doc : 1
+
+  reflect.proto :
+    inherit : predefined.reflect
+    reflector :
+      reflector::reflect.proto*=1
+    criterion :
+      debug : 1
+
+  reflect.docs.manual :
+    inherit : predefined.reflect
+    reflector :
+      reflector::reflect.docs.manual*=1
+    criterion :
+      debug : 1
+
+  clear.out :
+    inherit : predefined.delete
+    filePath : path::out.debug
+
+  npm.install :
+    currentPath : .
+    shell : npm i
+
+  server.start :
+    currentPath : .
+    shell : node staticserver.ss
+
+build :
+
+  doc :
+    criterion :
+      doc : 1
+      default : 1
+    steps :
+      - step::submodules.download
+      - step::clear.out
+      - step::reflect.proto*=1
+      - step::reflect.docs.manual*=1
+      - step::npm.install*=1
+      - step::server.start
+
+
