@@ -17,26 +17,26 @@
       repo: 'https://github.com/Wandalen/Documenation',
       // basePath: '/docs',
       // loadSidebar : '_sidebar.md',
-      markdown:
-      {
-        renderer:
-        {
-          link: function( href, title, text )
-          {
-            if( strBegins( href, '/' ) )
-            return this.origin.link( href,title,text );
+      // markdown:
+      // {
+      //   renderer:
+      //   {
+      //     link: function( href, title, text )
+      //     {
+      //       if( strBegins( href, '/' ) )
+      //       return this.origin.link( href,title,text );
 
-            if( /\.md$/.test( href ) )
-            {
-              let currentPath = document.location.href.replace( document.location.origin + '/#','' );
-              let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
-              href = currentDir + '/' + href;
-            }
+      //       if( /\.md$/.test( href ) )
+      //       {
+      //         let currentPath = document.location.href.replace( document.location.origin + '/#','' );
+      //         let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
+      //         href = currentDir + '/' + href;
+      //       }
 
-            return `<a href="/#/${href}" title="${title}">${text}</a>`
-          }
-        }
-      },
+      //       return `<a href="/#/${href}" title="${title}">${text}</a>`
+      //     }
+      //   }
+      // },
       search:
       {
           paths: 'auto',
