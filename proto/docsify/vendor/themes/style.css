@@ -1,0 +1,9 @@
+:root
+{
+    --heading-h3-font-size : 16px;
+}
+
+.markdown-section h3
+{
+    display: inline-block;
+}
