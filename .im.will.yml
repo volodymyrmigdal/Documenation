@@ -1,101 +1,97 @@
 
+about :
+  name : Documentation
 
 submodule :
+  willbe : git+https:///github.com/volodymyrmigdal/willbe.git/out/willbe#master
+  Tools : git+https:///github.com/Wandalen/wTools.git/out/wTools#master
 
 path :
 
-  in : '.'
-  temp : 'out'
-  out : 'out'
-  out.debug :
-    path : './out/debug'
-    criterion :
-      debug : 1
-  out.release :
-    path : './out/release'
-    criterion :
-      debug : 0
-  proto : './proto'
+  docsWillbe : './.module/willbe/doc'
+  docsTools : './.module/Tools/doc'
+  docsify : './proto/docsify'
+  out.debug : './out'
+  out.docs.Willbe : './out/docs/willbe'
+  out.docs.Tools : './out/docs/wTools'
 
 reflector :
 
-  reflect.proto :
-    inherit : predefined.*
-    criterion :
-      debug : [ 0,1 ]
-    filePath :
-      path::proto : path::out.*=1
+  # reflect.doc :
+  #   filePath :
+  #     submodule::*/exported::*=1/path::exportedDir*=1 : path::out.*=1
+  #   criterion :
+  #     debug : 1
+  #     doc : 1
 
-  reflect.submodules :
+  reflect.docsify :
     inherit : predefined.*
+    filePath :
+      path::docsify : path::out.debug
     criterion :
       debug : 1
+
+  reflect.docs.manual :
+    inherit : predefined.*
     filePath :
-      submodule::*/exported::*=1/path::exportedDir*=1 : path::out.*=1
+      path::docsWillbe : path::out.docs.Willbe
+      path::docsTools : path::out.docs.Tools
+    src :
+      ends : 'md'
+    criterion :
+      debug : 1
 
 step :
 
-  clean.out :
-    inherit : predefined.delete
-    filePath : path::out.debug
-    criterion :
-      debug : [ 0,1 ]
+  # reflect.doc :
+  #   inherit : predefined.reflect
+  #   reflector :
+  #     reflector::reflect.doc*=1
+  #   criterion :
+  #     debug : 1
+  #     doc : 1
 
-  reflect.proto :
+  reflect.docsify :
     inherit : predefined.reflect
     reflector :
-      reflector::reflect.proto.*=1
-    criterion :
-      debug : [ 0,1 ]
-      raw : [ 0,1 ]
-
-  reflect.submodules :
-    inherit : predefined.reflect
-    reflector :
-      reflector::reflect.submodules*=1
+      reflector::reflect.docsify*=1
     criterion :
       debug : 1
-      raw : [ 0,1 ]
+
+  reflect.docs.manual :
+    inherit : predefined.reflect
+    reflector :
+      reflector::reflect.docs.manual*=1
+    criterion :
+      debug : 1
+
+  clear.out :
+    inherit : predefined.delete
+    filePath : path::out.debug
+
+  npm.install :
+    currentPath : .
+    shell : npm i
+
+  jsdoc.generate :
+    currentPath : .
+    shell : node proto/js2md/js2md.ss .module
+
+  server.start :
+    currentPath : .
+    shell : node staticserver.ss
 
 build :
 
-  debug.raw :
+  doc :
     criterion :
+      doc : 1
       default : 1
-      debug : 1
-      raw : 1
     steps :
-      - step::clean.out*=1
-      - step::reflect.proto.*=1
-      # - step::reflect.submodules*=1
-
-  debug.compiled :
-    criterion :
-      debug : 1
-      raw : 0
-    steps :
-      - step::clean.out*=1
-      - step::reflect.proto.*=1
-
-  release.raw :
-    criterion :
-      debug : 0
-      raw : 1
-    steps :
-      - step::clean.out*=1
-      - step::reflect.proto.*=1
-
-  release.compiled :
-    criterion :
-      debug : 0
-      raw : 0
-    steps :
-      - step::clean.out*=1
-      - step::reflect.proto.*=1
-
-  all :
-    steps :
-      - build::debug.raw
-      - build::release.compiled
-
-
+      - step::submodules.download
+      - step::clear.out
+      - step::reflect.docsify*=1
+      - step::reflect.docs.manual*=1
+      - step::npm.install*=1
+      - step::jsdoc.generate
+      - step::server.start
