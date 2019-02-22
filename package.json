@@ -1,4 +1,5 @@
 {
+  "enabled" : 0,
   "dependencies": {
     "express": "",
     "jsdoc-to-markdown": "",
