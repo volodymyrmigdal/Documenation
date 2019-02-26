@@ -1,9 +1,15 @@
-/* :root
+:root
 {
-    --heading-h3-font-size : 16px;
+    --sidebar-width : 0px;
+    --content-max-width : 70em;
 }
 
-.markdown-section h3
+.sidebar
 {
-    display: inline-block;
-} */
+    display: none;
+}
+
+.sidebar-toggle
+{
+    display: none;
+}

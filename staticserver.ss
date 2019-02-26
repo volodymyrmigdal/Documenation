@@ -19,7 +19,7 @@ function indexGenerate()
 {
   let outPath = path.resolve( 'out' );
   let mdPath = path.resolve( 'out/docs' );
-  let mdIndexOut = path.join( mdPath, '_sidebar.md' );
+  let mdIndexOut = path.join( mdPath, '_homepage.md' );
 
   _.assert( provider.isDir( mdPath ) );
 
@@ -32,7 +32,7 @@ function indexGenerate()
     includingStem : 0
   })
 
-  let index = '';
+  let index = '# <center>Documentation</center>';
 
   dirs.forEach( ( dir ) =>
   {
@@ -51,11 +51,11 @@ function indexGenerate()
     if( provider.fileExists( readmePath ) )
     {
       let p = path.join( '/', dir.relative, 'README.md' );
-      index += `* [${dir.name}](${path.undot( p )})\n`
+      index += `  * [${dir.name}](${path.undot( p )})\n`
     }
     else
     {
-      index += `* ${dir.name}\n`
+      index += `\n### ${dir.name}\n`
 
       files.forEach( ( record ) =>
       {
