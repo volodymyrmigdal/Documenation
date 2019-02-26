@@ -45,14 +45,15 @@ function jsToMarkDownSingle( srcPath )
   let nativizedFiles = path.s.nativize( files );
   let nativizedConf = path.nativize( jsdocConf );
 
-  let partials = [ 'sig-link.hbs', 'header.hbs', 'docs.hbs', 'hr-line.hbs' ];
+  let partials = [ 'sig-link-parent.hbs', 'docs.hbs', 'header.hbs', 'hr-line.hbs' ];
   let partialsPath = path.s.join( __dirname, 'partials', partials );
 
   let result = jsdoc2md.renderSync
   ({
     files : nativizedFiles,
     configure : nativizedConf,
-    partial : path.s.nativize( partialsPath )
+    partial : path.s.nativize( partialsPath ),
+    'member-index-format' : 'list'
   });
 
   return result;
