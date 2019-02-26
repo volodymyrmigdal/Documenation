@@ -51,6 +51,7 @@ function indexGenerate()
     if( provider.fileExists( readmePath ) )
     {
       let p = path.join( '/', dir.relative, 'README.md' );
+      index += `\n### ${dir.name}\n`
       index += `  * [${dir.name}](${path.undot( p )})\n`
     }
     else
