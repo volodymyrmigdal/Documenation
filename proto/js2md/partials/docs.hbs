@@ -1,18 +1,8 @@
-{{#if (equal kind 'namespace')~}}
 {{>header~}}
 {{>body}}
+{{#unless (equal kind 'namespace')~}}
 {{>hr-line}}
+{{/unless~}}
 {{>member-index~}}
 {{>separator~}}
 {{>members~}}
-{{else~}}
-<details>
-<summary>{{>header~}}</summary>
-{{>body}}
-{{>hr-line}}
-{{>member-index~}}
-{{>separator~}}
-{{>members~}}
-</details>
-{{/if~}}
-
