@@ -7,6 +7,7 @@ if( typeof module !== 'undefined' )
   let _ = require( 'wFiles' );
   _.include( 'wExternalFundamentals' );
   var jsdoc2md = require( 'jsdoc-to-markdown' );
+  var state = require( 'dmd/lib/state.js' );
 }
 
 let _ = _global_.wTools;
@@ -81,6 +82,8 @@ function jsToMarkDown()
     includingTerminals : 0
   });
 
+  /* Reference generation: one md file per module  */
+
   let jsdocOutPath = path.resolve( 'out/docs/Reference' );
   let searchFilePath = path.resolve( 'out/searchIndex.json' );
 
@@ -103,10 +106,53 @@ function jsToMarkDown()
 
     provider.fileWrite( mdFileOutPath, result );
 
-
   })
 
   provider.fileWrite({ filePath : searchFilePath, data : jsDoc2Md.searchIndex, encoding : 'json.min' });
+
+  /* Modules index generation */
+
+  let modulesPaths = path.s.join( _.select( modules, '*/absolute' ), 'proto/**/*.{s,ss,js}' );
+  let jsdocConf = path.join( __dirname, 'jsdoc.json' );
+
+  let nativizedFiles = path.s.nativize( modulesPaths );
+  let nativizedConf = path.nativize( jsdocConf );
+
+  let partials = [ 'reference-index.hbs', 'module-index-dl.hbs', 'global-index-dl.hbs' ];
+  let partialsPath = path.s.join( __dirname, 'partials/reference-index-template', partials );
+  let helperPath = path.s.join( __dirname, 'helpers/helper.ss' );
+
+  /* Getting jsdoc data from modules */
+
+  state.templateDataOriginal = jsdoc2md.getTemplateDataSync
+  ({
+    files : nativizedFiles,
+    configure : nativizedConf,
+  });
+
+  /* Adding more info to use later in template */
+
+  state.templateDataOriginal.forEach( ( data ) =>
+  {
+    if( data.meta )
+    {
+      let normalizedPath = path.normalize( data.meta.path );
+      let isolated = _.strIsolateRightOrAll( normalizedPath, '/proto' )
+      data.meta.moduleName = path.name( isolated[ 0 ] );
+    }
+  })
+
+  let result = jsdoc2md.renderSync
+  ({
+    data : state.templateDataOriginal,
+    partial : path.s.nativize( partialsPath ),
+    helper : path.nativize( helperPath ),
+    template : '{{>reference-index}}'
+  });
+
+  let mdReferenceIndexOutPath = path.resolve( 'out/docs/ReferenceIndex.md' );
+  provider.fileWrite( mdReferenceIndexOutPath, result );
+
 }
 
 //

@@ -33,23 +33,23 @@ function indexGenerate()
 
   /* reference index */
 
-  let files = provider.filesFind
-  ({
-    filePath : referencePath,
-    recursive : 2,
-    includingTerminals : 1,
-    includingDirs : 1,
-    includingStem : 0,
-    filter : { ends : 'md' }
-  })
+  // let files = provider.filesFind
+  // ({
+  //   filePath : referencePath,
+  //   recursive : 2,
+  //   includingTerminals : 1,
+  //   includingDirs : 1,
+  //   includingStem : 0,
+  //   filter : { ends : 'md' }
+  // })
 
-  files.forEach( ( record ) =>
-  {
-    let p = path.join( '/Reference', record.relative );
-    referenceIndex += `\n  * [${record.name}](${ path.undot( p )})`
-  })
+  // files.forEach( ( record ) =>
+  // {
+  //   let p = path.join( '/Reference', record.relative );
+  //   referenceIndex += `\n  * [${record.name}](${ path.undot( p )})`
+  // })
 
-  provider.fileWrite( referenceIndexPath, referenceIndex );
+  // provider.fileWrite( referenceIndexPath, referenceIndex );
 
   /* manuals index */
 
