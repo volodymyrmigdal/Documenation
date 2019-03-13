@@ -66,3 +66,10 @@
 {
   text-decoration-line: underline
 }
+
+/*  */
+
+.docnav .item
+{
+  font-size: 14px!important;
+}

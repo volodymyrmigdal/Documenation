@@ -13,6 +13,10 @@ let _ = _global_.wTools;
 let path = _.path;
 let provider = _.fileProvider;
 
+let jsDoc2Md = _global_.jsdoc2md = Object.create( null );
+jsDoc2Md.currentFile = null;
+jsDoc2Md.searchIndex = Object.create( null );
+
 /*  */
 
 function jsToMarkDownSingle( srcPath )
@@ -78,6 +82,7 @@ function jsToMarkDown()
   });
 
   let jsdocOutPath = path.resolve( 'out/docs/Reference' );
+  let searchFilePath = path.resolve( 'out/searchIndex.json' );
 
   modules.forEach( ( record ) =>
   {
@@ -85,16 +90,26 @@ function jsToMarkDown()
     if( !provider.isDir( protoPath ) )
     return;
 
+    jsDoc2Md.currentFile = record.name;
+
     let result = jsToMarkDownSingle( protoPath );
+
+    jsDoc2Md.currentFile = null;
+
     if( !result )
     return;
 
     let mdFileOutPath = path.join( jsdocOutPath, record.name + '.md' );
 
     provider.fileWrite( mdFileOutPath, result );
+
+
   })
+
+  provider.fileWrite({ filePath : searchFilePath, data : jsDoc2Md.searchIndex, encoding : 'json.min' });
 }
 
+//
 
 jsToMarkDown();
 
