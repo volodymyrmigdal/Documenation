@@ -19,20 +19,48 @@ function indexGenerate()
 {
   let outPath = path.resolve( 'out' );
   let mdPath = path.resolve( 'out/docs' );
-  let mdIndexOut = path.join( mdPath, '_homepage.md' );
+  let manualsIndexPath = path.join( mdPath, 'ManualsIndex.md' );
+  let referenceIndexPath = path.join( mdPath, 'ReferenceIndex.md' );
 
-  _.assert( provider.isDir( mdPath ) );
+  let manualsPath = path.join( mdPath, 'Manuals' );
+  let referencePath = path.join( mdPath, 'Reference' );
+
+  _.assert( provider.isDir( manualsPath ) );
+  _.assert( provider.isDir( referencePath ) );
+
+  let referenceIndex = '# <center>Reference</center>';
+  let manualsIndex = '# <center>Manuals</center>';
+
+  /* reference index */
+
+  let files = provider.filesFind
+  ({
+    filePath : referencePath,
+    recursive : 2,
+    includingTerminals : 1,
+    includingDirs : 1,
+    includingStem : 0,
+    filter : { ends : 'md' }
+  })
+
+  files.forEach( ( record ) =>
+  {
+    let p = path.join( '/Reference', record.relative );
+    referenceIndex += `\n  * [${record.name}](${ path.undot( p )})`
+  })
+
+  provider.fileWrite( referenceIndexPath, referenceIndex );
+
+  /* manuals index */
 
   let dirs = provider.filesFind
   ({
-    filePath : mdPath,
+    filePath : manualsPath,
     recursive : 1,
     includingTerminals : 0,
     includingDirs : 1,
     includingStem : 0
   })
-
-  let index = '# <center>Documentation</center>';
 
   dirs.forEach( ( dir ) =>
   {
@@ -50,23 +78,23 @@ function indexGenerate()
 
     if( provider.fileExists( readmePath ) )
     {
-      let p = path.join( '/', dir.relative, 'README.md' );
-      index += `\n### ${dir.name}\n`
-      index += `  * [${dir.name}](${path.undot( p )})\n`
+      let p = path.join( '/Manuals', dir.relative, 'README.md' );
+      manualsIndex += `\n### ${dir.name}\n`
+      manualsIndex += `  * [README](${path.undot( p )})\n`
     }
     else
     {
-      index += `\n### ${dir.name}\n`
+      manualsIndex += `\n### ${dir.name}\n`
 
       files.forEach( ( record ) =>
       {
-        let p = path.join( '/',dir.relative, record.relative );
-        index += `  * [${record.name}](${ path.undot( p )})\n`
+        let p = path.join( '/Manuals',dir.relative, record.relative );
+        manualsIndex += `  * [${record.name}](${ path.undot( p )})\n`
       })
     }
   })
 
-  provider.fileWrite( mdIndexOut, index );
+  provider.fileWrite( manualsIndexPath, manualsIndex );
 }
 
 //

@@ -3,22 +3,16 @@ window.$docsify =
     name: 'Documentation',
     // repo: 'https://github.com/Wandalen/Documenation',
     basePath: '/docs',
-    homepage : '_homepage.md',
+    homepage : 'ReferenceIndex.md',
     loadSidebar : false,
     auto2top : true,
     markdown:
     {
-    renderer:
-    {
+      renderer:
+      {
         link: rendererOnLink
+      }
     }
-    },
-    search:
-    {
-        paths: 'auto',
-        placeholder: 'Search',
-        noData: 'No Results.'
-    },
 }
 
 window.onscroll = () =>
