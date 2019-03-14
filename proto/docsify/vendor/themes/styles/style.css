@@ -19,6 +19,12 @@
   margin-top: 50px;
 }
 
+.description
+{
+  margin-top: 0px;
+  padding-left: 25px !important;
+}
+
 .markdown-section a
 {
   text-decoration : none !important;
@@ -58,5 +64,10 @@
 .docnav .item
 {
   font-size: 14px!important;
+}
+
+.ui .accordion
+{
+  margin: 0px !important;
 }
 
