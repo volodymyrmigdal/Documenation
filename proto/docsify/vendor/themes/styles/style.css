@@ -19,6 +19,16 @@
   margin-top: 50px;
 }
 
+.markdown-section a
+{
+  text-decoration : none !important;
+}
+
+.markdown-section a :hover
+{
+  text-decoration : underline !important;
+}
+
 /*  */
 
 #scrollToTop
@@ -49,3 +59,4 @@
 {
   font-size: 14px!important;
 }
+
