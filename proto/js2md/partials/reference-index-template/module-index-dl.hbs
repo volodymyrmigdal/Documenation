@@ -1,0 +1,17 @@
+{{#modules~}}
+{{#if @first~}}{{>heading-indent}}Modules
+
+<dl>
+{{/if~}}
+<div class="ui styled accordion">
+  <div class="active title">
+    <i class="dropdown icon"></i>
+    <a href="/#/Reference/{{{this.meta.moduleName}}}">{{{name}}}</a>
+  </div>
+  <div class="content">{{{md (inlineLinks description)}}}</div>
+</div>
+<dl>
+{{#if @last~}}</dl>
+
+{{/if~}}
+{{/modules~}}
