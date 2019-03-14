@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "",
     "jsdoc-to-markdown": "",
+    "opn": "",
     "wFiles": ""
   },
   "devDependencies": {}
