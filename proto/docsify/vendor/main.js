@@ -34,7 +34,9 @@ function accordion( hook )
 {
   hook.doneEach( () =>
   {
-    $('.ui.accordion').accordion();
+    $('.ui.accordion')
+    .accordion()
+    .css( "box-shadow", "none" );
   });
 }
 
