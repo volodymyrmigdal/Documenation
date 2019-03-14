@@ -36,7 +36,6 @@ function accordion( hook )
   {
     $('.ui.accordion')
     .accordion()
-    .css( "box-shadow", "none" );
   });
 }
 
