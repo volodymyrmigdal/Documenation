@@ -140,12 +140,16 @@ step :
     currentPath : .
     shell : node staticserver.ss
 
+  page.open :
+    currentPath : .
+    shell : node opn.ss
+
 build :
 
-  doc :
+  generate :
     criterion :
       doc : 1
-      default : 1
+      default : 0
     steps :
       - step::submodules.download
       - step::clear.out
@@ -153,4 +157,19 @@ build :
       - step::reflect.manuals*=1
       - step::npm.install*=1
       - step::jsdoc.generate
+
+  start :
+    criterion :
+      doc : 1
+      default : 0
+    steps :
+      - step::page.open
       - step::server.start
+
+  doc :
+    criterion :
+      doc : 1
+      default : 1
+    steps :
+      - build::generate
+      - build::start

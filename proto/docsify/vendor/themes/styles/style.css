@@ -14,33 +14,19 @@
     display: none;
 }
 
-.navbar
-{
-  overflow: hidden;
-  position: fixed;
-  background-color: white;
-  top: 0;
-  width: 100%;
-}
-
-.navbar a
-{
-  float: left;
-  display: block;
-  color: black;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.navbar a:hover
-{
-  text-decoration-line: underline;
-}
-
 .content
 {
-  margin-top: 30px;
+  margin-top: 50px;
+}
+
+.markdown-section a
+{
+  text-decoration : none !important;
+}
+
+.markdown-section a:hover
+{
+  text-decoration : underline !important;
 }
 
 /*  */
@@ -73,3 +59,4 @@
 {
   font-size: 14px!important;
 }
+
