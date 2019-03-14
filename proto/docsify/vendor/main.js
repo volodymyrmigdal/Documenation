@@ -12,7 +12,11 @@ window.$docsify =
       {
         link: rendererOnLink
       }
-    }
+    },
+    plugins :
+    [
+      accordion
+    ]
 }
 
 window.onscroll = () =>
@@ -24,49 +28,59 @@ window.onscroll = () =>
     scrollToTop.style.display = 'none';
 }
 
-/* */
+/*  */
+
+function accordion( hook )
+{
+  hook.doneEach( () =>
+  {
+    $('.ui.accordion').accordion();
+  });
+}
+
+//
 
 function rendererOnLink( href, title, text )
 {
-    if( strBegins( href, '/' ) )
-    return this.origin.link( href,title,text );
+  if( strBegins( href, '/' ) )
+  return this.origin.link( href,title,text );
 
-    if( strBegins( href, '#' ) )
-    {
+  if( strBegins( href, '#' ) )
+  {
     let currentPath = document.location.href.replace( document.location.origin + '/#/','' );
     if( strHas( currentPath, '?' ) )
     currentPath = currentPath.substring( 0,currentPath.indexOf( '?' ) );
     let id = href.substring( 1 );
     href = currentPath + '?id=' + id;
-    }
-    else if( /\.md$/.test( href ) )
-    {
+  }
+  else if( /\.md$/.test( href ) )
+  {
     let currentPath = document.location.href.replace( document.location.origin + '/#','' );
     let currentDir = currentPath.substring( 1,currentPath.lastIndexOf( '/' ) );
     href = currentDir + '/' + href;
-    }
+  }
 
-    return `<a href="/#/${href}" title="${title}">${text}</a>`
+  return `<a href="/#/${href}" title="${title}">${text}</a>`
 }
 
 //
 
 function strBegins( src, begin )
 {
-    return src.lastIndexOf( begin, 0 ) === 0;
+  return src.lastIndexOf( begin, 0 ) === 0;
 }
 
 //
 
 function strHas( src, has )
 {
-    return src.indexOf( has ) != -1;
+  return src.indexOf( has ) != -1;
 }
 
 //
 
 function scrollToTop()
 {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
 }
