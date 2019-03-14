@@ -171,7 +171,7 @@ build :
       - step::page.open
       - step::server.start
 
-  doc :
+  default :
     criterion :
       doc : 1
       default : 1
