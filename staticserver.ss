@@ -20,36 +20,13 @@ function indexGenerate()
   let outPath = path.resolve( 'out' );
   let mdPath = path.resolve( 'out/docs' );
   let manualsIndexPath = path.join( mdPath, 'ManualsIndex.md' );
-  let referenceIndexPath = path.join( mdPath, 'ReferenceIndex.md' );
 
   let manualsPath = path.join( mdPath, 'Manuals' );
-  let referencePath = path.join( mdPath, 'Reference' );
 
   _.assert( provider.isDir( manualsPath ) );
-  _.assert( provider.isDir( referencePath ) );
 
-  let referenceIndex = '# <center>Reference</center>';
   let manualsIndex = '# <center>Manuals</center>';
-
-  /* reference index */
-
-  // let files = provider.filesFind
-  // ({
-  //   filePath : referencePath,
-  //   recursive : 2,
-  //   includingTerminals : 1,
-  //   includingDirs : 1,
-  //   includingStem : 0,
-  //   filter : { ends : 'md' }
-  // })
-
-  // files.forEach( ( record ) =>
-  // {
-  //   let p = path.join( '/Reference', record.relative );
-  //   referenceIndex += `\n  * [${record.name}](${ path.undot( p )})`
-  // })
-
-  // provider.fileWrite( referenceIndexPath, referenceIndex );
+  let manualsLocalPath = '/Manuals';
 
   /* manuals index */
 
@@ -74,13 +51,15 @@ function indexGenerate()
       filter : { ends : 'md' }
     })
 
-    let readmePath = path.join( dir.absolute, 'README.md' );
+    let readmePath = path.join( dir.absolute, 'doc/README.md' );
 
     if( provider.fileExists( readmePath ) )
     {
-      let p = path.join( '/Manuals', dir.relative, 'README.md' );
+      let localPath = path.join( manualsLocalPath, dir.relative, 'doc/README.md' );
+      localPath = path.undot( localPath );
+
       manualsIndex += `\n### ${dir.name}\n`
-      manualsIndex += `  * [README](${path.undot( p )})\n`
+      manualsIndex += `  * [${dir.name}/README](${localPath})\n`
     }
     else
     {
@@ -88,8 +67,12 @@ function indexGenerate()
 
       files.forEach( ( record ) =>
       {
-        let p = path.join( '/Manuals',dir.relative, record.relative );
-        manualsIndex += `  * [${record.name}](${ path.undot( p )})\n`
+        let localPath = path.join( manualsLocalPath,dir.relative, record.relative );
+        localPath = path.undot( localPath );
+        let title = _.strRemoveBegin( record.relative, './doc/' );
+        title = path.withoutExt( title );
+
+        manualsIndex += `  * [${title}](${localPath})\n`
       })
     }
   })

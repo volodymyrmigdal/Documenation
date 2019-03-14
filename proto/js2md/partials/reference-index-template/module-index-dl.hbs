@@ -3,8 +3,14 @@
 
 <dl>
 {{/if~}}
-<dt><a href="/#/Reference/{{{this.meta.moduleName}}}">{{{name}}}</a></dt>
-<dd>{{{md (inlineLinks description)}}}</dd>
+<div class="ui styled accordion">
+  <div class="active title">
+    <i class="dropdown icon"></i>
+    <a href="/#/Reference/{{{this.meta.moduleName}}}">{{{name}}}</a>
+  </div>
+  <div class="content">{{{md (inlineLinks description)}}}</div>
+</div>
+<dl>
 {{#if @last~}}</dl>
 
 {{/if~}}

@@ -66,18 +66,12 @@ path :
   docsConsequence : './.module/Consequence/doc'
   docsify : './proto/docsify'
   out.debug : './out'
+  out.debug.manuals : './out/docs/Manuals'
   out.docs.Willbe : './out/docs/Manuals/willbe'
   out.docs.Tools : './out/docs/Manuals/wTools'
   out.docs.Consequence : './out/docs/Manuals/wConsequence'
 
 reflector :
-
-  # reflect.doc :
-  #   filePath :
-  #     submodule::*/exported::*=1/path::exportedDir*=1 : path::out.*=1
-  #   criterion :
-  #     debug : 1
-  #     doc : 1
 
   reflect.docsify :
     inherit : predefined.*
@@ -86,26 +80,28 @@ reflector :
     criterion :
       debug : 1
 
-  reflect.docs.manual :
+  reflect.manuals :
     inherit : predefined.*
     filePath :
-      path::docsWillbe : path::out.docs.Willbe
-      path::docsTools : path::out.docs.Tools
-      path::docsConsequence : path::out.docs.Consequence
+      "{submodule::*/path::in}/doc" : path::out.debug.manuals*=1
     src :
-      ends : 'md'
+      basePath : ".module"
+      ends : md
     criterion :
-      debug : 1
+      doc : 1
 
-step :
-
-  # reflect.doc :
-  #   inherit : predefined.reflect
-  #   reflector :
-  #     reflector::reflect.doc*=1
+  # reflect.docs.manual :
+  #   inherit : predefined.*
+  #   filePath :
+  #     path::docsWillbe : path::out.docs.Willbe
+  #     path::docsTools : path::out.docs.Tools
+  #     path::docsConsequence : path::out.docs.Consequence
+  #   src :
+  #     ends : 'md'
   #   criterion :
   #     debug : 1
-  #     doc : 1
+
+step :
 
   reflect.docsify :
     inherit : predefined.reflect
@@ -114,12 +110,19 @@ step :
     criterion :
       debug : 1
 
-  reflect.docs.manual :
+  reflect.manuals :
     inherit : predefined.reflect
     reflector :
-      reflector::reflect.docs.manual*=1
+      reflector::reflect.manuals*=1
     criterion :
-      debug : 1
+      doc : 1
+
+  # reflect.docs.manual :
+  #   inherit : predefined.reflect
+  #   reflector :
+  #     reflector::reflect.docs.manual*=1
+  #   criterion :
+  #     debug : 1
 
   clear.out :
     inherit : predefined.delete
@@ -144,10 +147,10 @@ build :
       doc : 1
       default : 1
     steps :
-      # - step::submodules.download
+      - step::submodules.download
       - step::clear.out
       - step::reflect.docsify*=1
-      - step::reflect.docs.manual*=1
+      - step::reflect.manuals*=1
       - step::npm.install*=1
       - step::jsdoc.generate
       - step::server.start
