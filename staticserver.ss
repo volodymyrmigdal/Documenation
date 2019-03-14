@@ -23,6 +23,7 @@ function indexGenerate()
 
   let manualsPath = path.join( mdPath, 'Manuals' );
 
+  _.assert( provider.isDir( outPath ), 'Out path:', outPath, 'is missing. Please run "will .build generate" to build documentation.' );
   _.assert( provider.isDir( manualsPath ) );
 
   let manualsIndex = '# <center>Manuals</center>';
