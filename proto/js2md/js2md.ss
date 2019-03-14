@@ -112,10 +112,9 @@ function jsToMarkDown()
 
   /* Modules index generation */
 
-  let modulesPaths = path.s.join( _.select( modules, '*/absolute' ), 'proto/**/*.{s,ss,js}' );
+  let modulesPaths = path.s.join( _.select( modules, '*/absolute' ), 'proto' );
   let jsdocConf = path.join( __dirname, 'jsdoc.json' );
 
-  let nativizedFiles = path.s.nativize( modulesPaths );
   let nativizedConf = path.nativize( jsdocConf );
 
   let partials = [ 'reference-index.hbs', 'module-index-dl.hbs', 'global-index-dl.hbs' ];
@@ -123,6 +122,23 @@ function jsToMarkDown()
   let helperPath = path.s.join( __dirname, 'helpers/helper.ss' );
 
   /* Getting jsdoc data from modules */
+
+  var files = provider.filesFind
+  ({
+    filePath : modulesPaths,
+     recursive : 2,
+     filter :
+     {
+       ends : [ '.s','.ss','.js' ],
+       maskAll : { excludeAny : [ 'test', 'node_modules' ] }
+     },
+     includingDirs : 0,
+     includingTerminals : 1,
+     includingStem : 0,
+     outputFormat : 'absolute'
+  });
+
+  let nativizedFiles = path.s.nativize( files );
 
   state.templateDataOriginal = jsdoc2md.getTemplateDataSync
   ({
