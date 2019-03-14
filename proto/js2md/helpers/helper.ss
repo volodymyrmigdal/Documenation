@@ -1,6 +1,6 @@
 require( 'wTools' );
 let arrayify = require('array-back')
-// let state = require('dmd/lib/state.js') //access to templateData
+let state = require('dmd/lib/state.js') //access to templateData
 
 let _ = _global_.wTools;
 let jsDoc2Md = _global_.jsdoc2md;
@@ -47,7 +47,11 @@ function saveToSearchIndex()
 
 function logThis()
 {
-  console.log( this );
+  // if( this.kind === 'class' )
+  // console.log( state.templateDataMap[ this.order ].description );
+
+  if( this.kind === 'namespace' )
+  console.log( this )
 }
 
 exports.methodSignature = methodSignature;

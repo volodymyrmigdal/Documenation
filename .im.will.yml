@@ -136,6 +136,10 @@ step :
     currentPath : .
     shell : node proto/js2md/js2md.ss .module
 
+  manualsIndex.generate :
+    currentPath : .
+    shell : node manualsIndex.ss
+
   server.start :
     currentPath : .
     shell : node staticserver.ss
@@ -157,6 +161,7 @@ build :
       - step::reflect.manuals*=1
       - step::npm.install*=1
       - step::jsdoc.generate
+      - step::manualsIndex.generate
 
   start :
     criterion :
@@ -166,7 +171,7 @@ build :
       - step::page.open
       - step::server.start
 
-  doc :
+  default :
     criterion :
       doc : 1
       default : 1
