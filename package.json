@@ -2,9 +2,7 @@
   "enabled": 0,
   "dependencies": {
     "express": "",
-    "jsdoc-to-markdown": "",
-    "opn": "",
-    "wFiles": ""
+    "wdocgenerator": ""
   },
   "devDependencies": {}
 }

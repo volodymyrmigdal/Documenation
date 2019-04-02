@@ -61,68 +61,46 @@ submodule :
 
 path :
 
-  docsWillbe : './.module/willbe/doc'
-  docsTools : './.module/Tools/doc'
-  docsConsequence : './.module/Consequence/doc'
-  docsify : './proto/docsify'
-  out.debug : './out'
-  out.debug.manuals : './out/docs/Manuals'
-  out.docs.Willbe : './out/docs/Manuals/willbe'
-  out.docs.Tools : './out/docs/Manuals/wTools'
-  out.docs.Consequence : './out/docs/Manuals/wConsequence'
+  out.debug : out
+  out.sources : out/sources
+  out.doc : out/doc
+  concepts : concepts
+  tutorials : tutorials
+  wdoc.exec : node_modules/wdocgenerator/proto/dwtools/atop/docgen/Exec2
 
 reflector :
 
-  reflect.docsify :
+  reflect.concepts :
     inherit : predefined.*
     filePath :
-      path::docsify : path::out.debug
-    criterion :
-      debug : 1
-
-  reflect.manuals :
-    inherit : predefined.*
-    filePath :
-      "{submodule::*/path::in}/doc" : path::out.debug.manuals*=1
+      "{submodule::*/path::in}/doc" : path::concepts
     src :
       basePath : ".module"
       ends : md
+    # mandatory : 0
     criterion :
       doc : 1
 
-  # reflect.docs.manual :
-  #   inherit : predefined.*
-  #   filePath :
-  #     path::docsWillbe : path::out.docs.Willbe
-  #     path::docsTools : path::out.docs.Tools
-  #     path::docsConsequence : path::out.docs.Consequence
-  #   src :
-  #     ends : 'md'
-  #   criterion :
-  #     debug : 1
+  reflect.tutorials :
+    inherit : predefined.*
+    filePath :
+      "{submodule::*/path::in}/tutorials" : path::tutorials
+    src :
+      basePath : ".module"
+      ends : md
+    # mandatory : 0
+    criterion :
+      doc : 1
+
+  reflect.sources :
+    inherit : submodule::*/exported::*=1/reflector::exportedFiles*=1
+    dst :
+      basePath : .
+      prefixPath : path::out.sources
+    criterion :
+      doc : 1
 
 step :
-
-  reflect.docsify :
-    inherit : predefined.reflect
-    reflector :
-      reflector::reflect.docsify*=1
-    criterion :
-      debug : 1
-
-  reflect.manuals :
-    inherit : predefined.reflect
-    reflector :
-      reflector::reflect.manuals*=1
-    criterion :
-      doc : 1
-
-  # reflect.docs.manual :
-  #   inherit : predefined.reflect
-  #   reflector :
-  #     reflector::reflect.docs.manual*=1
-  #   criterion :
-  #     debug : 1
 
   clear.out :
     inherit : predefined.delete
@@ -132,21 +110,18 @@ step :
     currentPath : .
     shell : npm i
 
-  jsdoc.generate :
+  doc.generate :
     currentPath : .
-    shell : node proto/js2md/js2md.ss .module
+    shell : "node {path::wdoc.exec} .generate {path::out.sources} outPath:{path::out.doc}"
 
-  manualsIndex.generate :
-    currentPath : .
-    shell : node manualsIndex.ss
-
-  server.start :
-    currentPath : .
+  doc.docsify.run :
+    currentPath : path::out.doc
     shell : node staticserver.ss
 
-  page.open :
-    currentPath : .
-    shell : node opn.ss
+  doc.view :
+    inherit : predefined.view
+    filePath : http://127.0.0.1:3000
+    delay : 3000
 
 build :
 
@@ -157,19 +132,19 @@ build :
     steps :
       - step::submodules.download
       - step::clear.out
-      - step::reflect.docsify*=1
-      - step::reflect.manuals*=1
+      # - step::reflect.concepts*=1
+      # - step::reflect.tutorials*=1
+      - step::reflect.sources
       - step::npm.install*=1
-      - step::jsdoc.generate
-      - step::manualsIndex.generate
+      - step::doc.generate
 
   start :
     criterion :
       doc : 1
       default : 0
     steps :
-      - step::page.open
-      - step::server.start
+      - step::doc.view
+      - step::doc.docsify.run
 
   default :
     criterion :
