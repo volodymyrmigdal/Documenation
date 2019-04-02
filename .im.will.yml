@@ -72,23 +72,23 @@ reflector :
 
   reflect.concepts :
     inherit : predefined.*
+    mandatory : 0
     filePath :
       "{submodule::*/path::in}/doc" : path::concepts
     src :
       basePath : ".module"
       ends : md
-    # mandatory : 0
     criterion :
       doc : 1
 
   reflect.tutorials :
     inherit : predefined.*
+    mandatory : 0
     filePath :
       "{submodule::*/path::in}/tutorials" : path::tutorials
     src :
       basePath : ".module"
       ends : md
-    # mandatory : 0
     criterion :
       doc : 1
 
@@ -112,7 +112,7 @@ step :
 
   doc.generate :
     currentPath : .
-    shell : "node {path::wdoc.exec} .generate {path::out.sources} outPath:{path::out.doc}"
+    shell : "node {path::wdoc.exec} .generate {path::out.sources} outPath:{path::out.doc} conceptsPath:{path::concepts} tutorialsPath:{path::tutorials}"
 
   doc.docsify.run :
     currentPath : path::out.doc
@@ -132,8 +132,8 @@ build :
     steps :
       - step::submodules.download
       - step::clear.out
-      # - step::reflect.concepts*=1
-      # - step::reflect.tutorials*=1
+      - step::reflect.concepts*=1
+      - step::reflect.tutorials*=1
       - step::reflect.sources
       - step::npm.install*=1
       - step::doc.generate
