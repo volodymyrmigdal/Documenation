@@ -67,8 +67,7 @@ path :
   concepts : out/concepts
   tutorials : out/tutorials
   wdoc.exec : node_modules/wdocgenerator/proto/dwtools/atop/docgen/Exec2
-  node.modules : node_modules
-  package.lock : package-lock.json
+  temp : [ out, node_modules, package-lock.json ]
 
 reflector :
 
@@ -163,10 +162,3 @@ build :
     steps :
       - build::generate
       - build::start
-
-  clean :
-    steps :
-      - step::submodules.clean
-      - step::clean.out
-      - step::clean.node_modules
-      - step::clean.package-lock
