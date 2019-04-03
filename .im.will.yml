@@ -64,9 +64,11 @@ path :
   out.debug : out
   out.sources : out/sources
   out.doc : out/doc
-  concepts : concepts
-  tutorials : tutorials
+  concepts : out/concepts
+  tutorials : out/tutorials
   wdoc.exec : node_modules/wdocgenerator/proto/dwtools/atop/docgen/Exec2
+  node.modules : node_modules
+  package.lock : package-lock.json
 
 reflector :
 
@@ -102,9 +104,17 @@ reflector :
 
 step :
 
-  clear.out :
+  clean.out :
     inherit : predefined.delete
     filePath : path::out.debug
+
+  clean.node_modules :
+    inherit : predefined.delete
+    filePath : path::node.modules
+
+  clean.package-lock :
+    inherit : predefined.delete
+    filePath : path::package.lock
 
   npm.install :
     currentPath : .
@@ -131,7 +141,7 @@ build :
       default : 0
     steps :
       - step::submodules.download
-      - step::clear.out
+      - step::clean.out
       - step::reflect.concepts*=1
       - step::reflect.tutorials*=1
       - step::reflect.sources
@@ -153,3 +163,10 @@ build :
     steps :
       - build::generate
       - build::start
+
+  clean :
+    steps :
+      - step::submodules.clean
+      - step::clean.out
+      - step::clean.node_modules
+      - step::clean.package-lock
