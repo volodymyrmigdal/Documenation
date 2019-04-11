@@ -59,6 +59,8 @@ submodule :
   Testing : git+https:///github.com/Wandalen/wTesting.git/out/wTesting#master
   Willbe : git+https:///github.com/Wandalen/Willbe.git/out/Willbe#master
 
+  BaseNodejsCpp : git+https:///github.com/Wandalen/wBaseNodejsCpp.git/out/wBaseNodejsCpp#master
+
 path :
 
   out.debug : out
