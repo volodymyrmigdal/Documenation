@@ -109,13 +109,12 @@ reflector :
       cpp : 0
 
   reflect.cpp.sources :
-    inherit : submodule::*/exported::*=1/reflector::exportedFiles*=1
+    inherit : submodule::BaseNodejsCpp/exported::*=1/reflector::exportedFiles*=1
     dst :
       basePath : .
       prefixPath : path::out.sources.cpp
     criterion :
       doc : 1
-      cpp : 1
 
 step :
 
