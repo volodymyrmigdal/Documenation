@@ -59,12 +59,16 @@ submodule :
   Testing : git+https:///github.com/Wandalen/wTesting.git/out/wTesting#master
   Willbe : git+https:///github.com/Wandalen/Willbe.git/out/Willbe#master
 
-  BaseNodejsCpp : git+https:///github.com/Wandalen/wBaseNodejsCpp.git/out/wBaseNodejsCpp#master
+  BaseNodejsCpp :
+    path : git+https:///github.com/Wandalen/wBaseNodejsCpp.git/out/wBaseNodejsCpp#master
+    criterion :
+      cpp : 1
 
 path :
 
   out.debug : out
-  out.sources : out/sources
+  out.sources.js : out/sources/js
+  out.sources.cpp : out/sources/cpp
   out.doc : out/doc
   concepts : out/concepts
   tutorials : out/tutorials
@@ -95,13 +99,23 @@ reflector :
     criterion :
       doc : 1
 
-  reflect.sources :
+  reflect.js.sources :
     inherit : submodule::*/exported::*=1/reflector::exportedFiles*=1
     dst :
       basePath : .
-      prefixPath : path::out.sources
+      prefixPath : path::out.sources.js
     criterion :
       doc : 1
+      cpp : 0
+
+  reflect.cpp.sources :
+    inherit : submodule::*/exported::*=1/reflector::exportedFiles*=1
+    dst :
+      basePath : .
+      prefixPath : path::out.sources.cpp
+    criterion :
+      doc : 1
+      cpp : 1
 
 step :
 
@@ -123,7 +137,7 @@ step :
 
   doc.generate :
     currentPath : .
-    shell : "node {path::wdoc.exec} .generate {path::out.sources} outPath:{path::out.doc} conceptsPath:{path::concepts} tutorialsPath:{path::tutorials}"
+    shell : "node {path::wdoc.exec} .generate {path::out.sources.js} outPath:{path::out.doc} conceptsPath:{path::concepts} tutorialsPath:{path::tutorials}"
 
   doc.docsify.run :
     currentPath : path::out.doc
@@ -145,7 +159,8 @@ build :
       - step::clean.out
       - step::reflect.concepts*=1
       - step::reflect.tutorials*=1
-      - step::reflect.sources
+      - step::reflect.js.sources
+      - step::reflect.cpp.sources
       - step::npm.install*=1
       - step::doc.generate
 
