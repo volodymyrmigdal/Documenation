@@ -56,13 +56,42 @@ submodule :
   Communicator : git+https:///github.com/Wandalen/wCommunicator.git/out/wCommunicator#master
   Starter : git+https:///github.com/Wandalen/wStarter.git/out/wStarter#master
 
+  GdfStrategy : git+https:///github.com/Wandalen/wGdfStrategy.git/out/wGdfStrategy#master
+  AbstactGraph : git+https:///github.com/Wandalen/wAbstractGraph.git/out/wAbstractGraph#master
+  # Console : git+https:///github.com/Wandalen/wConsole.git/out/wConsole#master
+
   Testing : git+https:///github.com/Wandalen/wTesting.git/out/wTesting#master
   Willbe : git+https:///github.com/Wandalen/Willbe.git/out/Willbe#master
+  MathVector : git+https:///github.com/Wandalen/wMathVector.git/out/wMathVector#master
+  Maker : git+https:///github.com/Wandalen/wMaker.git/out/wMaker#master
+  LoggerFromAnsiToCss : git+https:///github.com/Wandalen/wLoggerFromAnsiToCss.git/out/wLoggerFromAnsiToCss#master
+  MathConcepts : git+https:///github.com/Wandalen/wMathConcepts.git/out/wMathConcepts#master
+  LoggerToFile : git+https:///github.com/Wandalen/wLoggerToFile.git/out/wLoggerToFile#master
+  DomBase : git+https:///github.com/Wandalen/wDomBase.git/out/wDomBase#master
+  EntityFundamentals : git+https:///github.com/Wandalen/wEntityFundamentals.git/out/wEntityFundamentals#master
+  GuiTree : git+https:///github.com/Wandalen/wGuiTree.git/out/wGuiTree#master
+  SelectorExtra : git+https:///github.com/Wandalen/wSelectorExtra.git/out/wSelectorExtra#master
+  MathSpace : git+https:///github.com/Wandalen/wMathSpace.git/out/wMathSpace#master
+  Stager : git+https:///github.com/Wandalen/wStager.git/out/wStager#master
+  Replicator : git+https:///github.com/Wandalen/wReplicator.git/out/wReplicator#master
+  RoutineFundamentals : git+https:///github.com/Wandalen/wRoutineFundamentals.git/out/wRoutineFundamentals#master
+  MathScalar : git+https:///github.com/Wandalen/wMathScalar.git/out/wMathScalar#master
+  # FilesTransformers : git+https:///github.com/Wandalen/wFilesTransformers.git/out/wFilesTransformers#master
+  # wLoggerToServer : git+https:///github.com/Wandalen/wLoggerToServer.git/out/wLoggerToServer#master
+  # FilesFilterCaching : git+https:///github.com/Wandalen/wFilesFilterCaching.git/out/wFilesFilterCaching#master
+  # FilesFilterSurrogate : git+https:///github.com/Wandalen/wFilesFilterSurrogate.git/out/wFilesFilterSurrogate#master
+  # wDeployer : git+https:///github.com/Wandalen/wDeployer.git/out/wDeployer#master
+
 
   BaseNodejsCpp :
     path : git+https:///github.com/Wandalen/wBaseNodejsCpp.git/out/wBaseNodejsCpp#master
     criterion :
       cpp : 1
+
+  # BufferFromFile :
+  #   path : git+https:///github.com/Wandalen/BufferFromFile.git/out/BufferFromFile#master
+  #   criterion :
+  #     cpp : 1
 
 path :
 
@@ -81,7 +110,7 @@ reflector :
     inherit : predefined.*
     mandatory : 0
     filePath :
-      "{submodule::*/path::in}/doc" : path::concepts
+      "{submodule::*/path::in}/doc/concepts" : path::concepts
     src :
       basePath : ".module"
       ends : md
@@ -92,7 +121,7 @@ reflector :
     inherit : predefined.*
     mandatory : 0
     filePath :
-      "{submodule::*/path::in}/tutorials" : path::tutorials
+      "{submodule::*/path::in}/doc/tutorials" : path::tutorials
     src :
       basePath : ".module"
       ends : md
@@ -136,7 +165,7 @@ step :
 
   doc.generate :
     currentPath : .
-    shell : "node {path::wdoc.exec} .generate {path::out.sources.js} outPath:{path::out.doc} conceptsPath:{path::concepts} tutorialsPath:{path::tutorials}"
+    shell : "node {path::wdoc.exec} .generate {path::out.sources.js} outPath:{path::out.doc} useWillForManuals : 1"
 
   doc.docsify.run :
     currentPath : path::out.doc
@@ -149,7 +178,7 @@ step :
 
 build :
 
-  generate :
+  build :
     criterion :
       doc : 1
       default : 0
@@ -161,6 +190,14 @@ build :
       - step::reflect.js.sources
       - step::reflect.cpp.sources
       - step::npm.install*=1
+      - step::doc.generate
+
+
+  generate :
+    criterion :
+      doc : 1
+      default : 0
+    steps :
       - step::doc.generate
 
   start :
@@ -176,5 +213,5 @@ build :
       doc : 1
       default : 1
     steps :
-      - build::generate
+      - build::build
       - build::start
