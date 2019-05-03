@@ -99,6 +99,7 @@ path :
   out.sources.js : out/sources/js
   out.sources.cpp : out/sources/cpp
   out.doc : out/doc
+  out.docs : out/docs
   concepts : out/concepts
   tutorials : out/tutorials
   wdoc.exec : node_modules/wdocgenerator/proto/dwtools/atop/docgen/Exec2
@@ -106,27 +107,15 @@ path :
 
 reflector :
 
-  reflect.concepts :
-    inherit : predefined.*
-    mandatory : 0
-    filePath :
-      "{submodule::*/path::in}/doc/concepts" : path::concepts
-    src :
-      basePath : ".module"
-      ends : md
-    criterion :
-      doc : 1
-
-  reflect.tutorials :
-    inherit : predefined.*
-    mandatory : 0
-    filePath :
-      "{submodule::*/path::in}/doc/tutorials" : path::tutorials
-    src :
-      basePath : ".module"
-      ends : md
-    criterion :
-      doc : 1
+  # reflect.doc :
+  #   inherit : predefined.*
+  #   mandatory : 0
+  #   filePath :
+  #     "{submodule::*/path::in}/doc" : path::out.docs
+  #   src :
+  #     basePath : ".module"
+  #   criterion :
+  #     doc : 1
 
   reflect.js.sources :
     inherit : submodule::*/exported::*=1/reflector::exportedFiles*=1
@@ -165,7 +154,7 @@ step :
 
   doc.generate :
     currentPath : .
-    shell : "node {path::wdoc.exec} .generate {path::out.sources.js} outPath:{path::out.doc} useWillForManuals : 1"
+    shell : "node {path::wdoc.exec} .generate {path::out.sources.js} outPath:{path::out.doc} includingSubmodules:1"
 
   doc.docsify.run :
     currentPath : path::out.doc
@@ -185,8 +174,7 @@ build :
     steps :
       - step::submodules.download
       - step::clean.out
-      - step::reflect.concepts*=1
-      - step::reflect.tutorials*=1
+      # - step::reflect.doc*=1
       - step::reflect.js.sources
       - step::reflect.cpp.sources
       - step::npm.install*=1
